@@ -11,7 +11,7 @@ import (
 type CliCommand struct {
 	Name        string
 	Description string
-	Callback    func(*config) error
+	Callback    func(cfg *config, args ...string) error
 }
 
 var CommandMap = make(map[string]CliCommand)
@@ -37,6 +37,11 @@ func InitializeCommands() {
 		Description: "Lists 20 previous location areas",
 		Callback:    mapbFunc,
 	}
+	CommandMap["explore"] = CliCommand{
+		Name:        "explore",
+		Description: "Explore a specified location",
+		Callback:    explore,
+	}
 }
 
 func GetCommand(name string) (CliCommand, bool) {
@@ -44,12 +49,12 @@ func GetCommand(name string) (CliCommand, bool) {
 	return cmd, found
 }
 
-func Exit(cfg *config) error {
+func Exit(cfg *config, args ...string) error {
 	fmt.Println("Exiting...")
 	return nil
 }
 
-func Help(cfg *config) error {
+func Help(cfg *config, args ...string) error {
 	fmt.Println("Available commands:")
 	for name, cmd := range CommandMap {
 		fmt.Printf("%s - %s\n", name, cmd.Description)
@@ -57,7 +62,7 @@ func Help(cfg *config) error {
 	return nil
 }
 
-func callbackMap(cfg *config) error {
+func callbackMap(cfg *config, args ...string) error {
 	var cacheKey string
 	var locationAreaResp pokeapi.LocationAreaResp // declare a variable to hold the response
 
@@ -99,7 +104,7 @@ func callbackMap(cfg *config) error {
 	return nil
 }
 
-func mapbFunc(cfg *config) error {
+func mapbFunc(cfg *config, args ...string) error {
 	var cacheKey string
 	var locationAreaResp pokeapi.LocationAreaResp
 
@@ -107,7 +112,7 @@ func mapbFunc(cfg *config) error {
 	if cfg.previousLocationAreaURL != nil && *cfg.previousLocationAreaURL != "" {
 		cacheKey = *cfg.previousLocationAreaURL
 	} else {
-		return errors.New("No previous URL to fetch location areas from")
+		return errors.New("no previous URL to fetch location areas from")
 	}
 
 	cachedData, found := cfg.pokeapiCache.Get(cacheKey)

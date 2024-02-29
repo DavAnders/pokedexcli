@@ -42,3 +42,25 @@ func (c *Client) ListLocationAreas(pageURL *string) (LocationAreaResp, error) {
 
 	return locationAreaResp, nil
 }
+
+func (c *Client) FetchLocationAreaDetail(nameOrID string) (LocationAreaDetail, error) {
+	var detail LocationAreaDetail
+	url := fmt.Sprintf("%s/location-area/%s", baseURL, nameOrID)
+
+	resp, err := http.Get(url)
+	if err != nil {
+		return detail, fmt.Errorf("error fetching location area detail: %v", err)
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		return detail, fmt.Errorf("PokeAPI returned non-OK status: %d", resp.StatusCode)
+	}
+
+	err = json.NewDecoder(resp.Body).Decode(&detail)
+	if err != nil {
+		return detail, fmt.Errorf("error decoding response: %v", err)
+	}
+
+	return detail, nil
+}
