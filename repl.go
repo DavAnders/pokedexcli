@@ -11,7 +11,7 @@ func start(cfg *config) {
 	scanner := bufio.NewScanner(os.Stdin)
 	InitializeCommands()
 	for {
-		fmt.Print("> ")
+		fmt.Print("Pokedex > ")
 		scanner.Scan()
 		text := scanner.Text()
 
@@ -20,6 +20,7 @@ func start(cfg *config) {
 			continue
 		}
 		command := parts[0]
+		args := parts[1:]
 
 		if command == "exit" {
 			fmt.Println("Exiting...")
@@ -27,7 +28,7 @@ func start(cfg *config) {
 		}
 
 		if cmd, found := GetCommand(command); found {
-			err := cmd.Callback(cfg)
+			err := cmd.Callback(cfg, args...)
 			if err != nil {
 				fmt.Fprintf(os.Stderr, "error executing command -- %v\n", err)
 			}
