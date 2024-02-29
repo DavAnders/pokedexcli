@@ -15,7 +15,7 @@ func start(cfg *config) {
 		scanner.Scan()
 		text := scanner.Text()
 
-		parts := strings.Fields(text) // separating to handle more than one argument
+		parts := strings.Fields(text) // separating to handle more than one argument (might not need)
 		if len(parts) == 0 {
 			continue
 		}
