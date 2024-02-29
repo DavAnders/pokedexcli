@@ -17,10 +17,12 @@ type Cache struct {
 }
 
 func NewCache(interval time.Duration) *Cache {
-	return &Cache{
+	cache := &Cache{
 		entries:  make(map[string]cacheEntry),
 		interval: interval,
 	}
+	go cache.reapLoop()
+	return cache
 }
 
 func (c *Cache) Add(key string, val []byte) {
@@ -43,4 +45,24 @@ func (c *Cache) Get(key string) ([]byte, bool) {
 	}
 
 	return entry.val, true
+}
+
+func (c *Cache) reapLoop() {
+	ticker := time.NewTicker(c.interval)
+	for {
+		select {
+		case <-ticker.C:
+			c.reap()
+		}
+	}
+}
+
+func (c *Cache) reap() {
+	c.mutex.Lock()
+	defer c.mutex.Unlock()
+	for key, entry := range c.entries {
+		if time.Since(entry.createdAt) > c.interval {
+			delete(c.entries, key)
+		}
+	}
 }
