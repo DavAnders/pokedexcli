@@ -5,13 +5,11 @@ import (
 	"fmt"
 	"os"
 	"strings"
-
-	"github.com/DavAnders/pokedexcli/commands"
 )
 
-func start() {
+func start(cfg *config) {
 	scanner := bufio.NewScanner(os.Stdin)
-	commands.InitializeCommands()
+	InitializeCommands()
 	for {
 		fmt.Print("> ")
 		scanner.Scan()
@@ -28,10 +26,10 @@ func start() {
 			break
 		}
 
-		if cmd, found := commands.GetCommand(command); found {
-			err := cmd.Callback()
+		if cmd, found := GetCommand(command); found {
+			err := cmd.Callback(cfg)
 			if err != nil {
-				fmt.Fprintf(os.Stderr, "Error executing command %v\n", err)
+				fmt.Fprintf(os.Stderr, "error executing command -- %v\n", err)
 			}
 			continue
 		} else {
