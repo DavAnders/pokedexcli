@@ -12,12 +12,14 @@ type config struct {
 	nextLocationAreaURL     *string
 	previousLocationAreaURL *string
 	pokeapiCache            *pokecache.Cache
+	Pokedex                 map[string]pokeapi.PokemonData
 }
 
 func main() {
 	cfg := config{
 		pokeapiClient: pokeapi.NewClient(),
 		pokeapiCache:  pokecache.NewCache(time.Minute * 5),
+		Pokedex:       make(map[string]pokeapi.PokemonData),
 	}
 	start(&cfg)
 }

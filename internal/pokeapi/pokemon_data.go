@@ -8,7 +8,7 @@ import (
 
 type PokemonData struct {
 	Name           string `json:"name"`
-	BaseExperience string `json:"base_experience"`
+	BaseExperience int    `json:"base_experience"`
 }
 
 type UserData struct {
