@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"math/rand"
+	"time"
 
 	"github.com/DavAnders/pokedexcli/internal/pokeapi"
 )
@@ -44,8 +45,13 @@ func catch(cfg *config, args ...string) error {
 	if rand.Float64() < catchRate {
 		// successful catch & add to pokedex
 		cfg.Pokedex[pokemonName] = pokemonData
+		fmt.Printf("Throwing a Pokeball at %s...\n", pokemonName)
+		time.Sleep(time.Second)
 		fmt.Println(cfg.Pokedex[pokemonName].Name, "was caught!")
+		fmt.Println("You may now inspect it with the inspect command.")
 	} else {
+		fmt.Printf("Throwing a Pokeball at %s...\n", pokemonName)
+		time.Sleep(time.Second)
 		fmt.Println(pokemonData.Name, "escaped!")
 	}
 	return nil
