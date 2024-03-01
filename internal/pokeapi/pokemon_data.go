@@ -7,8 +7,33 @@ import (
 )
 
 type PokemonData struct {
-	Name           string `json:"name"`
-	BaseExperience int    `json:"base_experience"`
+	Name           string        `json:"name"`
+	BaseExperience int           `json:"base_experience"`
+	Height         int           `json:"height"`
+	Weight         int           `json:"weight"`
+	Stats          []StatBlock   `json:"stats"`
+	Types          []PokemonType `json:"types"`
+}
+
+type PokemonType struct {
+	Slot int      `json:"slot"`
+	Type TypeInfo `json:"type"`
+}
+
+type TypeInfo struct {
+	Name string `json:"name"`
+	URL  string `json:"url"`
+}
+
+type StatBlock struct {
+	BaseStat int        `json:"base_stat"`
+	Effort   int        `json:"effort"`
+	Stat     StatDetail `json:"stat"`
+}
+
+type StatDetail struct {
+	Name string `json:"name"`
+	URL  string `json:"url"`
 }
 
 type UserData struct {
