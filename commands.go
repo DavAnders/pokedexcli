@@ -42,6 +42,11 @@ func InitializeCommands() {
 		Description: "Explore a specified location",
 		Callback:    explore,
 	}
+	CommandMap["catch"] = CliCommand{
+		Name:        "catch",
+		Description: "Catch a Pokemon to add to Pokedex",
+		Callback:    catch,
+	}
 }
 
 func GetCommand(name string) (CliCommand, bool) {
